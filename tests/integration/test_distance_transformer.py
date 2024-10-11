@@ -89,14 +89,13 @@ def test_should_maintain_all_data_it_reads(SPARK) -> None:
     actual_dataframe = SPARK.read.parquet(given_transform_folder)
     actual_columns = set(actual_dataframe.columns)
     actual_schema = set(actual_dataframe.schema)
-    expected_columns = set(given_dataframe.columns)
+    expected_columns = set(given_dataframe.columns + ["distance"])
     expected_schema = set(given_dataframe.schema)
 
     assert expected_columns == actual_columns
     assert expected_schema.issubset(actual_schema)
 
 
-@pytest.mark.skip
 def test_should_add_distance_column_with_calculated_distance(SPARK) -> None:
     given_ingest_folder, given_transform_folder = __create_ingest_and_transform_folders(SPARK)
     distance_transformer.run(SPARK, given_ingest_folder, given_transform_folder)
